@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: #21242CCC;
+  }
+  * { box-sizing: border-box; }
+  #search-bar {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background: #292929;
+    width: 100%;
+    padding: 16px 16px 8px 16px;
+    border-bottom: 1px solid rgba(1,1,1,0.05);
+  }
+  #search {
+    display: block;
+    border: 1px solid #000;
+    background: #000;
+    border-bottom-color: rgba(24, 101, 242, 0.2);
+    border-radius: 4px;
+    padding: .5em .75em;
+    width: calc(100% - 32px);
+    transition: .1s all ease-in-out;
+    font-size: 16px;
+    color: #fff;
+  }
+  #search::placeholder {
+    color: #ffffff99;
+  }
+  #search:focus {
+    color: #fff;
+    border: 1px solid #ffffff99;
+    outline: 1px solid #ffffff99;
+  }
+  #contents {
+    margin-top: 90px;          
+  }
+  #meta {
+    padding: .5em 0 0 0;
+    color: #ffffffBB;
+    font-size: 12px;
+    padding-left: 8px;
+    text-align: right;
+    margin-right: 33px;
+  }
+  #events {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 8px;
+    max-width: calc(100%);
+  }
+  .event {
+    font-size: 14px;
+    background: #D6FBCC;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all .35s ease-in-out;
+    line-height: 1.25;
+    cursor: grab;
+    margin-bottom: 8px;
+  }
+  .event:hover {
+    /* border-left: 2px solid #5BA26F; */
+    box-shadow: 0 4px 4px rgba(0,0,0,0.15), 0 8px 8px rgba(0,0,0,0.15), 0 16px 16px rgba(0,0,0,0.15);
+    transform: scale(1.005, 1.005) translateY(-2px);
+    transition: all .15s ease-in-out;
+  }
+  .event h3 {
+    font-family: 'Roboto Mono', monospace;
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    font-weight: bold;
+  }
+  .event .description {
+    margin-top: 8px;
+    overflow-y: hidden;
+    opacity: 0.9;
+  }
+  .event strong {
+    padding: 0 .1em;
+    color: #D6FBCC;
+    background: #193625BB;
+    border-radius: 3px;
+    font-weight: inherit;
+  }
+  #new-event {
+    color: #21242C;
+    display: block;
+    transition: .2s all ease-in-out;
+    border-radius: 3px;
+    padding: 4px;
+    position: absolute;
+    top: 16px;
+    right: 8px;
+  }
+  #new-event:hover {
+    background:rgb(91, 162, 111);
+    cursor: grab;
+  }
+  #new-event:hover svg path {
+    transition: .2s all ease-in-out;
+    stroke: #fff;
+  }
+  #corner{
+    position: fixed;
+    right: 3px;
+    bottom: 3px;
+    opacity: .35;
+    cursor: nwse-resize;
+  }

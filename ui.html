@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style id="styles">
+        </style>
+  </head>
+<body>
+    <div id="search-bar">
+      <div id="search-wrapper">
+        <input type="search" id="search" name="search" placeholder="Search CEDAR events">
+      </div>
+      <a href="#" id="new-event" draggable="true"><svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.75 12.5H20.25M12 4.25V20.75" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg></a>
+      <div id="meta">Loading...</div>
+    </div>
+    <div id="contents">
+
+      <div id="events">
+      </div>
+    </div>
+
+    <div id="main">
+      <svg id="corner" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 0V16H0L16 0Z" fill="white"/>
+        <path d="M6.22577 16H3L16 3V6.22576L6.22577 16Z" fill="#8C8C8C"/>
+        <path d="M11.8602 16H8.63441L16 8.63441V11.8602L11.8602 16Z" fill="#8C8C8C"/>
+      </svg>
+    </div>
+
+    <script>
+
+        var eventsData = {};
+        var searchValue = "";
+
+        //  TODO: Load the events
+        //  loadEvents();
+
+        window.onmessage = (event) => {
+          if (event.data.pluginMessage.type === 'eventsDataPush') {
+            eventsData = event.data.pluginMessage.data;
+            drawEvents(eventsData);
+            setTimeout( ()=>{document.getElementById("search").focus();}, 1000);
+          }
+          else if (event.data.pluginMessage.type === 'cssDataPush') {
+            let cssString = event.data.pluginMessage.data;
+            let styleElement = document.getElementById('styles');
+            styleElement.type = 'text/css';
+            styleElement.innerHTML = cssString;
+          }
+        };
+
+        // async function loadEvents(url){
+        //   let fetchUrl = "http://localhost";
+        //   fetch(fetchUrl).then(function (response) {
+        //     drawEvents(eventsData);
+        //   }).catch(function (err) {
+        //     console.log("load error!!!");
+        //     reject('Something went wrong.');
+        //   });
+        //   setTimeout( ()=>{document.getElementById("search").focus();}, 1000);
+        // }
+            
+        // Handle the search button click
+        let debounceTimeout;
+        const debounceTime = 100;
+        document.getElementById('search').onkeyup = (e) => {
+          clearTimeout(debounceTimeout);
+          debounceTimeout = setTimeout(() => {
+
+            // Get the search input value
+            searchValue = e.srcElement.value.trim();
+
+            let searchWords = searchValue.toLowerCase().split(' ');
+            let filteredEvents = Object.keys(eventsData)
+              .filter(key =>
+                // Check if any search word is included in the key
+                searchWords.every(word => key.toLowerCase().includes(word) || eventsData[key].description.toLowerCase().includes(word))
+              )
+              .reduce((obj, key) => {
+                obj[key] = eventsData[key];
+                return obj;
+              }, {});
+
+            drawEvents(filteredEvents);
+          }, debounceTime); // Debounce time is 300ms
+        }
+        
+        document.getElementById('search').onclick = (e) => {
+          setTimeout(()=> {
+            if (e.srcElement.value === ""){
+              drawEvents(eventsData);
+            }
+          }, 150);
+        }
+
+        
+
+
+        function registerDrag(eventDiv, event){
+          //  drag and drop
+          let offsetX = 0;
+          let offsetY = 0;
+
+          eventDiv.addEventListener('dragstart', e => {
+            // Getting the offset position (The position of the cursor relative to the top-left corner of item being dragged)
+            offsetX = e.offsetX;
+            offsetY = e.offsetY;
+          });
+
+          eventDiv.addEventListener('dragend', e => {
+            // Don't proceed if the item was dropped inside the plugin window.
+            if (e.view.length === 0) return;
+
+            const dropPosition = { clientX: e.clientX, clientY: e.clientY };
+            const windowSize = {width: window.outerWidth, height: window.outerHeight}
+            const offset = { x: offsetX, y:offsetY };
+
+            const name = event ? event : "ProposedEvent";
+            const description = event ? eventsData[event].description : "Description..."
+            const isNew = event ? false : true;
+
+            // This will trigger a drop event in Figma that we can register a callback for
+            window.parent.postMessage(
+              {
+                pluginMessage: {
+                  dropPosition: dropPosition,
+                  windowSize: windowSize,
+                  offset: offset,
+                  data: {
+                    name: name, 
+                    description: description, 
+                    isNew: isNew 
+                  },
+                }
+              },
+              '*'
+            );
+          });
+        }
+
+        function drawEvents(events){
+
+          const count = Object.keys(events).length;
+          document.getElementById('meta').innerHTML = `${count} ${count == 1 ? "event" : "events"}`;
+          const eventsNode = document.getElementById('events');
+          while (eventsNode.firstChild) {
+            eventsNode.removeChild(eventsNode.firstChild);
+          }
+          //  sort alphabetically
+          const sortedEventsKeys = Object.keys(events).sort();
+          //  build the nodes
+          for (let event of sortedEventsKeys) {
+              let eventDiv = document.createElement('div');
+              let searchWords = searchValue.toLowerCase().trim().split(' ');
+              // if (searchValue.length > 2) 
+              //     debugger;
+              if (searchWords.length > 0) {
+                // Create a single regular expression that matches any of the search words
+                let regexPattern = searchWords.join('|'); // Join all words with the pipe symbol to create an 'OR' condition in regex
+                let regex = new RegExp(`(${regexPattern})`, 'gi'); // 'g' for global, 'i' for case-insensitive
+                
+                // Function to wrap matched word with <strong> tag
+                const highlightMatch = (match) => 
+                  { return match.length > 0 ? `<strong>${match}</strong>` : "" };
+
+                // Highlight search words in eventName
+                let eventName = event.replace(regex, highlightMatch);
+
+                // Highlight search words in eventDescription
+                let eventDescription = eventsData[event].description.replace(regex, highlightMatch);
+                // Set the innerHTML of eventDiv with highlighted eventName and eventDescription
+                eventDiv.innerHTML = `<h3>${eventName}</h3><div class="description">${eventDescription}</div>`;
+              } else {
+                
+                // Fallback in case there are no valid search words
+                let eventName = event;
+                let eventDescription = eventsData[event].description;
+                eventDiv.innerHTML = `<h3>${eventName}</h3><div class="description">${eventDescription}</div>`;
+              }
+
+              document.getElementById('events').appendChild(eventDiv);
+              eventDiv.setAttribute("name", event);
+              eventDiv.setAttribute("draggable", "true");
+              eventDiv.classList.add("event");
+
+              registerDrag(eventDiv, event); 
+
+
+          }
+        }
+
+
+
+        registerDrag(document.getElementById('new-event'));
+
+
+        //  resizing UI
+        const corner = document.getElementById('corner');
+        function resizeWindow(e) {
+          const size = {
+            w: e.clientX+5,
+            h: e.clientY+5
+          };
+          parent.postMessage( { pluginMessage: { type: 'resize', size: size }}, '*');
+        }
+        corner.onpointerdown = (e)=>{
+          corner.onpointermove = resizeWindow;
+          corner.setPointerCapture(e.pointerId);
+        };
+        corner.onpointerup = (e)=>{
+          corner.onpointermove = null;
+          corner.releasePointerCapture(e.pointerId);
+          parent.postMessage( { pluginMessage: { type: 'resizeEnd', size: size }}, '*');
+        };
+
+</script>
+
+</body>
+</html>

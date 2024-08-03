@@ -1,0 +1,24 @@
+{
+  "name": "events_drop",
+  "version": "0.9.0",
+  "description": "Add analytics events to your mocks to communicate the intended instrumentation",
+  "main": "code.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "npm run build -- --watch"
+  },
+  "author": "Jonah Goldsaito",
+  "license": "MIT",
+  "homepage": "",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.85.0",
+    "@figma/widget-typings": "^1.9.1",
+    "css-loader": "^6.10.0",
+    "raw-loader": "^4.0.2",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.2",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -1,0 +1,11 @@
+{
+	"name": "events_drop",
+	"id": "______________",
+	"api": "1.0.0",
+	"main": "dist/code.js",
+	"editorType": ["figma", "figjam"],
+	"ui": "ui.html",
+	"networkAccess": {
+	  "allowedDomains": ["none"]
+	}
+  }

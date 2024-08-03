@@ -1,0 +1,65 @@
+{
+  "AICatMindReaderEnabled": {
+    "description": "Cat mind-reading enabled."
+  },
+  "AppOpened": {
+    "description": "The cat has opened the app."
+  },
+  "LogIn": {
+    "description": "The cat has successfully logged in."
+  },
+  "LogOut": {
+    "description": "The cat has logged out of the app."
+  },
+  "IceCreamFlavorSelected": {
+    "description": "The cat has selected a flavor of ice cream."
+  },
+  "AddToCartClicked": {
+    "description": "The cat has added an item to their shopping cart."
+  },
+  "CheckoutInitiated": {
+    "description": "The cat has started the checkout process."
+  },
+  "PaymentCompleted": {
+    "description": "The cat has successfully completed a payment."
+  },
+  "PaymentFailed": {
+    "description": "The system has encountered an error during the payment process."
+  },
+  "OrderConfirmed": {
+    "description": "The cat has received an order confirmation."
+  },
+  "OrderShipped": {
+    "description": "The system has updated the order status to shipped."
+  },
+  "OrderDelivered": {
+    "description": "The system has updated the order status to delivered."
+  },
+  "IceCreamReviewed": {
+    "description": "The cat has submitted a review for a purchased ice cream."
+  },
+  "FavoriteFlavorSaved": {
+    "description": "The cat has saved a favorite ice cream flavor."
+  },
+  "CustomerSupportContacted": {
+    "description": "The cat has contacted customer support."
+  },
+  "PromotionalCodeApplied": {
+    "description": "The cat has applied a promotional code during checkout."
+  },
+  "CatProfileCreated": {
+    "description": "The cat has created a profile."
+  },
+  "CatProfileClicked": {
+    "description": "The cat has opened their profile."
+  },
+  "CatProfileUpdated": {
+    "description": "The cat has updated their profile."
+  },
+  "AppNotificationReceived": {
+    "description": "The cat has received a push notification from the app."
+  },
+  "IceCreamShared": {
+    "description": "The cat has shared an ice cream product on social media."
+  }
+}
